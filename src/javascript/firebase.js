@@ -1,4 +1,8 @@
 import * as firebase from 'firebase';
+import teamModel from './models/team';
+import playerModel from './models/player';
+import fineModel from './models/fine';
+
 let database
 
 export const init = () => {
@@ -13,3 +17,7 @@ export const init = () => {
     firebase.initializeApp(config);
     database = firebase.database();
 }
+
+export const getFinetrakDb = (sectionId) => {
+    return database.ref(`/${sectionId}`).once('value');
+};
