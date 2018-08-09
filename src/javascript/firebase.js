@@ -18,24 +18,29 @@ export const init = () => {
     database = firebase.database();
 }
 
+//
+export const getTeamsDB = () => {
+  return database.ref('/teams/').once('value')
+}
+
 // get team
 export const getTeamDb = (teamId) => {
-    return database.ref(`/${teamId}`).once('value');
+    return database.ref(`/teams/${teamId}`).once('value');
 };
 
 // add new team
 export const addTeam = (name, code) => {
-    let key = database.ref('/').push().key
+    let key = database.ref('/teams/').push().key
     let model = teamModel(name, code);
-    return database.ref('/'+key).set(model);
+    return database.ref('/teams/'+key).set(model);
 };
 
 export const addFineItem = (teamId, infringement, amount) => {
     return new Promise((resolve, reject) => {
-        database.ref(`/${teamId}`).once('value').then((teamDb) => {
+        database.ref(`/teams/${teamId}`).once('value').then((teamDb) => {
             let fines = teamDb.val().fines || [];
             fines.push(fineModel(infringement, amount));
-            database.ref(`/${teamId}/fines`).set(fines)
+            database.ref(`/teams/${teamId}/fines`).set(fines)
                 .then(res => {resolve(res)})
                 .catch(err => {reject(err)});
         })

@@ -1,21 +1,38 @@
 import React, { Component } from 'react';
-import logo from 'components/App/logo.svg';
+import TeamList from './team-list';
+import {connect} from 'react-redux';
+import {loadTeams, createTeam} from 'actions/finetrakActions';
 import './style.css';
 
+const mapStateToProps = (state) => ({
+    teams: state.teams
+})
+
 class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
-        </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
-    );
-  }
+    componentDidMount() {
+        this.props.loadTeams();
+    }
+
+    onSubmit = (e) => {
+        e.preventDefault();
+        let ref = this.refs['team-name'];
+        let code = this.refs['team-code'];
+        let teamName = ref.value;
+        this.props.createTeam(teamName,code.value);
+        ref.value = '';
+    }
+    render() {
+        return (
+            <div>
+                <TeamList teams={this.props.teams}/>
+                <form onSubmit={this.onSubmit}>
+                    <input ref="team-name"/>
+                    <input ref="team-code"/>
+                    <button>Add new team</button>
+                </form>
+            </div>
+        );
+    }
 }
 
-export default App;
+export default connect(mapStateToProps, {loadTeams, createTeam})(App)
