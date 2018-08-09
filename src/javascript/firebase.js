@@ -18,6 +18,38 @@ export const init = () => {
     database = firebase.database();
 }
 
-export const getFinetrakDb = (sectionId) => {
-    return database.ref(`/${sectionId}`).once('value');
+// get team
+export const getTeamDb = (teamId) => {
+    return database.ref(`/${teamId}`).once('value');
 };
+
+// add new team
+export const addTeam = (name, code) => {
+    let key = database.ref('/').push().key
+    let model = teamModel(name, code);
+    return database.ref('/'+key).set(model);
+};
+
+export const addFineItem = (teamId, infringement, amount) => {
+    return new Promise((resolve, reject) => {
+        database.ref(`/${teamId}`).once('value').then((teamDb) => {
+            let fines = teamDb.val().fines || [];
+            fines.push(fineModel(infringement, amount));
+            database.ref(`/${teamId}/fines`).set(fines)
+                .then(res => {resolve(res)})
+                .catch(err => {reject(err)});
+        })
+    })
+}
+
+export const addPlayerItem = (teamId, name) => {
+    return new Promise((resolve, reject) => {
+        database.ref(`/${teamId}`).once('value').then((teamDb) => {
+            let players = teamDb.val().players || [];
+            players.push(playerModel(name));
+            database.ref(`/${teamId}/players`).set(players)
+                .then(res => {resolve(res)})
+                .catch(err => {reject(err)});
+        })
+    })
+}
