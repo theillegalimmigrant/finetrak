@@ -5,7 +5,7 @@ import {loadTeams, createTeam} from 'actions/finetrakActions';
 import './style.css';
 
 const mapStateToProps = (state) => ({
-    teamDocs: state.teamDocs
+    teamDocs: state.finetrakReducer.teamDocs
 })
 
 class App extends Component {
@@ -34,6 +34,7 @@ class App extends Component {
                     <input ref="team-code"/>
                     <button>Add new team</button>
                 </form>
+                <button onClick={() => console.log(this.props)}>Click</button>
             </div>
         );
     }
