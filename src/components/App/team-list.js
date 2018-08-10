@@ -5,7 +5,9 @@ export default (props) => {
     return (
         <ul>
             {
-                _.map(props.teamDocs, (teamDoc) => <li key={teamDoc.id}>{teamDoc.data().name}</li>)
+                _.map(props.teamDocs, (teamDoc) => (
+                    <li key={teamDoc.id}>{teamDoc.data().name}</li>)
+                 )
             }
         </ul>
     )

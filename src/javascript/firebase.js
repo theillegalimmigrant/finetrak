@@ -31,9 +31,8 @@ export const getTeamDb = (teamId) => {
 
 // add new team
 export const addTeam = (name, code) => {
-    let key = database.ref('/teams/').push().key
     let model = teamModel(name, code);
-    return database.ref('/teams/'+key).set(model);
+    return database.collection('teams').add(model);
 };
 
 export const addFineItem = (teamId, infringement, amount) => {
