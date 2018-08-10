@@ -1,6 +1,10 @@
 import React from 'react';
 import _ from 'lodash';
 
+const sumOfFines = (teamFines, playerFines) => {
+  return playerFines.reduce((total, fine) => total + teamFines[fine.fineId].amount, 0)
+}
+
 export default (props) => {
   return (
     <div>
@@ -11,8 +15,8 @@ export default (props) => {
             <ul>
               {
                 _.map(teamDoc.data().players, (player, index) =>
-                  <li key={`${teamDoc.data().name}-player${index}`}>{player.name}</li>
-              )
+                  <li key={`${teamDoc.data().name}-player${index}`}>{`${player.name} = ${sumOfFines(teamDoc.data().fines, player.fines)}`}</li>
+                )
               }
             </ul>
           </div>
