@@ -24,11 +24,6 @@ export const getTeamsDB = () => {
   return database.collection('teams').get();
 }
 
-// get team
-export const getTeamDb = (teamId) => {
-    return database.collection('teams').once('value');
-};
-
 // add new team
 export const addTeam = (name, code) => {
     let model = teamModel(name, code);
