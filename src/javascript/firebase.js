@@ -26,7 +26,7 @@ export const getTeamsDB = () => {
 
 // get team
 export const getTeamDb = (teamId) => {
-    return database.ref(`/teams/${teamId}`).once('value');
+    return database.collection('teams').once('value');
 };
 
 // add new team

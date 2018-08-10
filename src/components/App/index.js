@@ -5,7 +5,7 @@ import {loadTeams, createTeam} from 'actions/finetrakActions';
 import './style.css';
 
 const mapStateToProps = (state) => ({
-    teams: state.teams
+    teamDocs: state.teamDocs
 })
 
 class App extends Component {
@@ -22,10 +22,11 @@ class App extends Component {
         ref.value = '';
         code.value = '';
     }
+
     render() {
         return (
             <div>
-                <TeamList teams={this.props.teams}/>
+                <TeamList teamDocs={this.props.teamDocs}/>
                 <form onSubmit={this.onSubmit}>
                     <input ref="team-name"/>
                     <input ref="team-code"/>

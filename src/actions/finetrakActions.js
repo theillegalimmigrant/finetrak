@@ -8,7 +8,6 @@ export const loadTeams = () => {
         });
         getTeamsDB()
             .then(teams => {
-                console.log(teams.docs);
                 dispatch({
                     type: actionType.LOAD_TEAMS_SUCCESS,
                     payload: teams.docs

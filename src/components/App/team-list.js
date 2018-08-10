@@ -2,10 +2,11 @@ import React from 'react';
 import _ from 'lodash';
 
 export default (props) => {
+console.log(props);
     return (
         <ul>
             {
-                _.map(props.teams, (team) => <li>{team.name}</li>)
+                _.map(props.teamDocs, (teamDoc) => <li>{teamDoc.data().name}</li>)
             }
         </ul>
     )
