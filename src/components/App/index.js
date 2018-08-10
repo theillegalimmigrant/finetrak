@@ -10,6 +10,7 @@ const mapStateToProps = (state) => ({
 
 class App extends Component {
     componentDidMount() {
+    console.log('componentDidMount');
         this.props.loadTeams();
     }
 
@@ -24,6 +25,7 @@ class App extends Component {
     }
 
     render() {
+    console.log('render');
         return (
             <div>
                 <TeamList teamDocs={this.props.teamDocs}/>

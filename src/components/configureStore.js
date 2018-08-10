@@ -1,10 +1,13 @@
-import {createStore, applyMiddleware} from 'redux'
+import {createStore, applyMiddleware, compose } from 'redux'
 import thunk from 'redux-thunk'
 import reducers from '../reducers/finetrakReducers'
 
 export default () => {
+    const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
     const middlewares = [thunk];
-    const store = createStore(reducers, applyMiddleware(...middlewares), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+    const store = createStore(reducers, composeEnhancers(
+        applyMiddleware(...middlewares)
+    ));
 
     return store;
 };
