@@ -1,4 +1,5 @@
-import * as firebase from 'firebase';
+import firebase from '@firebase/app';
+import '@firebase/firestore'
 import teamModel from './models/team';
 import playerModel from './models/player';
 import fineModel from './models/fine';
@@ -15,12 +16,12 @@ export const init = () => {
         messagingSenderId: "1040720117676"
     };
     firebase.initializeApp(config);
-    database = firebase.database();
+    database = firebase.firestore();
+    database.settings({ timestampsInSnapshots: true });
 }
 
-//
 export const getTeamsDB = () => {
-  return database.ref('/teams/').once('value')
+  return database.collection('teams').get();
 }
 
 // get team

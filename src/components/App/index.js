@@ -20,6 +20,7 @@ class App extends Component {
         let teamName = ref.value;
         this.props.createTeam(teamName,code.value);
         ref.value = '';
+        code.value = '';
     }
     render() {
         return (
