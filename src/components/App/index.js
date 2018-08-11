@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import TeamList from './team-list';
 import {connect} from 'react-redux';
 import * as actions from 'actions/finetrakActions';
+
+import { Button } from 'react-bootstrap';
+
 import './style.css';
 
 const mapStateToProps = (state) => ({
@@ -47,8 +50,8 @@ class App extends Component {
         <form onSubmit={this.onSubmit}>
           <input ref="team-name" placeholder="Enter team name"/>
           <input ref="team-code" placeholder="Enter team code"/>
-          <button onClick={this.onSubmit}>Add new team</button>
-          <button onClick={this.onJoin}>Join team</button>
+          <Button onClick={this.onSubmit}>Add new team</Button>
+          <Button onClick={this.onJoin}>Join team</Button>
         </form>
 
         <TeamList teamDocs={this.props.teamDocs}/>
