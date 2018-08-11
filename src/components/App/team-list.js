@@ -6,9 +6,16 @@ const sumOfFines = (teamFines, playerFines) => {
 }
 
 export default (props) => {
+
+  const isEmptyTeam = props.teamDocs.length === 0;
   return (
     <div>
       {
+        isEmptyTeam ?
+        <div>
+          Incorrect team name or team code. Please try again.
+        </div>
+        :
         _.map(props.teamDocs, (teamDoc) => (
           <div key={teamDoc.id}>
             <h2>{teamDoc.data().name}</h2>
