@@ -1,4 +1,4 @@
-import { getTeamsDB, addTeam } from 'javascript/firebase';
+import * as fb from 'javascript/firebase';
 import actionType from 'constants';
 
 export const loadTeams = () => {
@@ -6,7 +6,7 @@ export const loadTeams = () => {
         dispatch({
             type: actionType.LOAD_TEAMS_REQUEST
         });
-        getTeamsDB()
+        fb.getTeamsDB()
             .then(teams => {
                 dispatch({
                     type: actionType.LOAD_TEAMS_SUCCESS,
@@ -22,14 +22,35 @@ export const loadTeams = () => {
     };
 }
 
+export const getTeam = (name, code) => {
+  return dispatch => {
+    dispatch({
+      type: actionType.GET_TEAM_REQUEST
+    })
+    fb.getTeam(name, code)
+      .then(team => {
+        dispatch({
+          type: actionType.GET_TEAM_SUCCESS,
+          payload: team.docs
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: actionType.GET_TEAM_FAILED,
+          payload: error
+        });
+      })
+  };
+}
+
 export const createTeam = (name, code) => {
     return dispatch => {
         dispatch({
             type: actionType.ADD_TEAM_REQUEST
         })
-        addTeam(name, code)
+        fb.addTeam(name, code)
             .then(res => {
-                loadTeams()(dispatch) //refresh the data to keep up to date
+                getTeam(name, code)(dispatch)
                 dispatch({
                     type: actionType.ADD_TEAM_SUCCESS
                 })

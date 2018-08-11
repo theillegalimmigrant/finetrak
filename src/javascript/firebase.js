@@ -30,6 +30,10 @@ export const addTeam = (name, code) => {
     return database.collection('teams').add(model);
 };
 
+export const getTeam = (name, code) => {
+  return database.collection('teams').where('name','==',name).where('code','==',code).get();
+}
+
 export const addFineItem = (teamId, infringement, amount) => {
     return new Promise((resolve, reject) => {
         database.ref(`/teams/${teamId}`).once('value').then((teamDb) => {

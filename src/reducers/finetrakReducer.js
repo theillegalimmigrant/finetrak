@@ -12,6 +12,10 @@ export default (state = initialState, action) => {
         newState.teamDocs = action.payload;
         return newState;
     }
+    case actionType.GET_TEAM_SUCCESS: {
+      newState.teamDocs = action.payload;
+      return newState;
+    }
     default:
         return state;
   }
