@@ -1,47 +1,49 @@
 import React from 'react';
 import _ from 'lodash';
 import PlayerRow from './player-row';
-import {Button} from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 
 import * as actions from 'actions/finetrakActions';
 
-export default (props) => {
 
-  const isEmptyTeam = props.teamDocs.length === 0;
+class TeamList extends React.Component {
 
-  return (
-    <div>
-      {
-        isEmptyTeam ?
-        <div>
-          Incorrect team name or team code. Please try again.
-        </div>
-        :
-        _.map(props.teamDocs, (teamDoc) => (
-          <div className='container' key={teamDoc.id}>
-            <h2>{teamDoc.data().name}</h2>
-            <div>
-              <span>
-                <input ref="new-player-name" placeholder="Enter new player"/>
-                <Button onClick={actions.createPlayer(teamDoc, this.refs['new-player-name'].value)}>Add player</Button>
-              </span>
+  onCreatePlayer = (teamDoc) => {
+    let playerName = this.refs['new-player-name'].value;
+    actions.createPlayer(teamDoc.id, playerName);
+  }
+
+  render() {
+
+    const {
+      teamDocs
+    } = this.props;
+
+    const isEmptyTeam = teamDocs.length === 0;
+
+    return (
+      <div>
+        {
+          isEmptyTeam ?
+          <div>
+            Incorrect team name or team code. Please try again.
+          </div>
+          :
+          _.map(teamDocs, (teamDoc) => (
+            <div className='container' key={teamDoc.id}>
+              <h2>{teamDoc.data().name}</h2>
               <div>
-                {
-                  _.map(teamDoc.get().players, (player, index) => {
-                    return (
-                      <PlayerRow
-                        player={player}
-                        teamName={teamDoc.get().name}
-                        teamFines={teamDoc.get().fines}
-                      />
-                    )
-                  })
-                }
+                <span>
+                  <input ref="new-player-name" placeholder="Enter new player"/>
+                  <Button onClick={() => this.onCreatePlayer(teamDoc)}>Add player</Button>
+                </span>
               </div>
             </div>
-          </div>
-        ))
-      }
-    </div>
-  );
+          ))
+        }
+      </div>
+    );
+  }
 }
+
+export default TeamList;

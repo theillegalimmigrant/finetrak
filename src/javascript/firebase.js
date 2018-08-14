@@ -26,32 +26,26 @@ export const getTeamsDB = () => {
 
 // add new team
 export const addTeam = (name, code) => {
+console.log('FB - addTeam');
     let model = teamModel(name, code);
     return database.collection('teams').add(model);
 };
 
 export const getTeam = (name, code) => {
+console.log('FB - getTeam');
   return database.collection('teams').where('name','==',name).where('code','==',code).get();
 }
 
 export const getTeamById = (teamId) => {
+console.log('FB - getTeamById');
   return database.collection('teams').doc(teamId);
 }
 
-export const addFineItem = (teamId, infringement, amount) => {
-    return new Promise((resolve, reject) => {
-        database.ref(`/teams/${teamId}`).once('value').then((teamDb) => {
-            let fines = teamDb.val().fines || [];
-            fines.push(fineModel(infringement, amount));
-            database.ref(`/teams/${teamId}/fines`).set(fines)
-                .then(res => {resolve(res)})
-                .catch(err => {reject(err)});
-        })
-    })
-}
+export const addPlayer = (teamId, name) => {
+    let model = playerModel(name);
 
-export const addPlayerItem = (teamId, name) => {
-    let model = playerModel(name)
+console.log('FB - addPlayer');
+
     return database.collection('teams')
                    .doc(teamId)
                    .collection('players')

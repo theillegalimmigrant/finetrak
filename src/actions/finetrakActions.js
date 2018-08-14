@@ -86,22 +86,26 @@ export const getTeamById = (teamId) => {
 }
 
 export const createPlayer = (teamId, name) => {
+
+    console.log(teamId);
+    console.log(name);
+    fb.addPlayer(teamId, name);
   return dispatch => {
     dispatch({
       type: actionType.ADD_PLAYER_REQUEST
     })
     fb.addPlayer(teamId, name)
-      .then((res) => {
-        getTeamById(teamId)
-        dispatch({
-            type: actionType.ADD_PLAYER_SUCCESS
-          })
-        })
-        .catch(error => {
+      .then(res => {
+          getTeamById(teamId)(dispatch)
           dispatch({
-            type: actionType.ADD_PLAYER_FAILURE,
-            payload: error
+              type: actionType.ADD_PLAYER_SUCCESS
           })
+      })
+      .catch(error => {
+        dispatch({
+          type: actionType.ADD_PLAYER_FAILURE,
+          payload: error
         })
+      })
   }
 }
