@@ -25,6 +25,19 @@ export default (props) => {
                 <input ref="new-player-name" placeholder="Enter new player"/>
                 <Button onClick={actions.createPlayer(teamDoc, this.refs['new-player-name'].value)}>Add player</Button>
               </span>
+              <div>
+                {
+                  _.map(teamDoc.get().players, (player, index) => {
+                    return (
+                      <PlayerRow
+                        player={player}
+                        teamName={teamDoc.get().name}
+                        teamFines={teamDoc.get().fines}
+                      />
+                    )
+                  })
+                }
+              </div>
             </div>
           </div>
         ))
