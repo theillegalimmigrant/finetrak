@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import TeamList from './team-list';
 import {connect} from 'react-redux';
 import * as actions from 'actions/finetrakActions';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { Button } from 'react-bootstrap';
 
@@ -41,6 +42,8 @@ class App extends Component {
         this.props.dispatchGetTeam(ref.value,code.value);
         ref.value = '';
         code.value = '';
+      } else {
+        this.props.dispatchGetTeam('DLSKCC1','dlskcc1');
       }
     }
 

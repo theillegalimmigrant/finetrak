@@ -1,13 +1,14 @@
 import React from 'react';
 import _ from 'lodash';
+import PlayerRow from './player-row';
+import {Button} from 'react-bootstrap';
 
-const sumOfFines = (teamFines, playerFines) => {
-  return playerFines.reduce((total, fine) => total + teamFines[fine.fineId].amount, 0)
-}
+import * as actions from 'actions/finetrakActions';
 
 export default (props) => {
 
   const isEmptyTeam = props.teamDocs.length === 0;
+
   return (
     <div>
       {
@@ -17,15 +18,14 @@ export default (props) => {
         </div>
         :
         _.map(props.teamDocs, (teamDoc) => (
-          <div key={teamDoc.id}>
+          <div className='container' key={teamDoc.id}>
             <h2>{teamDoc.data().name}</h2>
-            <ul>
-              {
-                _.map(teamDoc.data().players, (player, index) =>
-                  <li key={`${teamDoc.data().name}-player${index}`}>{`${player.name} = ${sumOfFines(teamDoc.data().fines, player.fines)}`}</li>
-                )
-              }
-            </ul>
+            <div>
+              <span>
+                <input ref="new-player-name" placeholder="Enter new player"/>
+                <Button onClick={actions.createPlayer(teamDoc, this.refs['new-player-name'].value)}>Add player</Button>
+              </span>
+            </div>
           </div>
         ))
       }

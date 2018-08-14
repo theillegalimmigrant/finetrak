@@ -34,6 +34,10 @@ export const getTeam = (name, code) => {
   return database.collection('teams').where('name','==',name).where('code','==',code).get();
 }
 
+export const getTeamById = (teamId) => {
+  return database.collection('teams').doc(teamId);
+}
+
 export const addFineItem = (teamId, infringement, amount) => {
     return new Promise((resolve, reject) => {
         database.ref(`/teams/${teamId}`).once('value').then((teamDb) => {
@@ -47,13 +51,9 @@ export const addFineItem = (teamId, infringement, amount) => {
 }
 
 export const addPlayerItem = (teamId, name) => {
-    return new Promise((resolve, reject) => {
-        database.ref(`/${teamId}`).once('value').then((teamDb) => {
-            let players = teamDb.val().players || [];
-            players.push(playerModel(name));
-            database.ref(`/${teamId}/players`).set(players)
-                .then(res => {resolve(res)})
-                .catch(err => {reject(err)});
-        })
-    })
+    let model = playerModel(name)
+    return database.collection('teams')
+                   .doc(teamId)
+                   .collection('players')
+                   .add(model)
 }

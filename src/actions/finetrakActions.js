@@ -63,3 +63,45 @@ export const createTeam = (name, code) => {
             })
     };
 }
+
+export const getTeamById = (teamId) => {
+  return dispatch => {
+      dispatch({
+        type: actionType.GET_TEAM_REQUEST
+      })
+      fb.getTeamById(teamId)
+        .then(team => {
+          dispatch({
+            type: actionType.GET_TEAM_SUCCESS,
+            payload: team.docs
+          })
+        })
+        .catch(error => {
+          dispatch({
+            type: actionType.GET_TEAM_FAILED,
+            payload: error
+          });
+        })
+    };
+}
+
+export const createPlayer = (teamId, name) => {
+  return dispatch => {
+    dispatch({
+      type: actionType.ADD_PLAYER_REQUEST
+    })
+    fb.addPlayer(teamId, name)
+      .then((res) => {
+        getTeamById(teamId)
+        dispatch({
+            type: actionType.ADD_PLAYER_SUCCESS
+          })
+        })
+        .catch(error => {
+          dispatch({
+            type: actionType.ADD_PLAYER_FAILURE,
+            payload: error
+          })
+        })
+  }
+}
