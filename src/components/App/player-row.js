@@ -1,29 +1,23 @@
 import React from 'react';
 import _ from 'lodash';
-import {
-  Button,
-  MenuItem,
-  DropdownButton
-} from 'react-bootstrap';
-//
-//import DropdownButton from './DropdownButton';
-//
-//import SimpleDropdown from './SimpleDropdown';
+import { Button } from 'react-bootstrap';
+import Dropdown, { DropdownTrigger, DropdownContent } from 'react-simple-dropdown';
+
+import './style.css';
 
 class PlayerRow extends React.Component {
 
-  sumOfFines = (teamFines, playerFines, playerPayments) => {
-    console.log('fines');
-    const fineAmount = playerFines.reduce((total, fine) => total + teamFines[fine.fineId].amount, 0);
-    const paymentAmount = playerPayments.reduce((total, payment) => total + payment.amount, 0);
-
-    return fineAmount - paymentAmount;
+  sumOfFines = (teamFineDocs, playerFines, playerPayments) => {
+//    const fineAmount = playerFines.reduce((total, fine) => total + teamFineDocs.doc(fine.fineId).amount, 0);
+//    const paymentAmount = playerPayments.reduce((total, payment) => total + payment.amount, 0);
+//
+//    return fineAmount - paymentAmount;
+    return 10;
   }
 
   render() {
     const {
-      teamName,
-      teamFines,
+      teamFineDocs,
       player
     } = this.props;
 
@@ -39,11 +33,19 @@ class PlayerRow extends React.Component {
           {name}
         </div>
         <div className='col-sm-2'>
-          {this.sumOfFines(teamFines, fines, payments)}
+          {this.sumOfFines(teamFineDocs, fines, payments)}
         </div>
         <div className='col-sm-6'>
           <span>
-
+            <Dropdown>
+              <DropdownTrigger>Add fine</DropdownTrigger>
+              <DropdownContent>
+                <ul>
+                  <li>Drop catch</li>
+                  <li>Duck</li>
+                </ul>
+              </DropdownContent>
+            </Dropdown>
           </span>
           <span>
             <input ref="payment-amount" placeholder="Enter payment amount"/>

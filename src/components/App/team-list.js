@@ -20,8 +20,12 @@ class TeamList extends React.Component {
   render() {
 
     const {
-      teamDoc
+      teamDoc,
+      playerDocs,
+      fineDocs,
     } = this.props;
+
+    const team = teamDoc ? teamDoc.data() : {};
 
     const isOffline = false;
     const offlineTeamDoc = isOffline ? dummyData : teamDoc;
@@ -44,18 +48,28 @@ class TeamList extends React.Component {
 //              </div>
 //            </div>
 //          )
-
           :
           (
             <div className='container' key={teamDoc.id}>
-              <h2>{teamDoc.data().name}</h2>
+              <h2>{team.name}</h2>
               <div>
                 <span>
                   <input ref="new-player-name" placeholder="Enter new player"/>
                   <Button onClick={() => this.onCreatePlayer(teamDoc)}>Add player</Button>
                 </span>
                 <span>
-
+                  {
+                    _.map(playerDocs, (playerDoc) => {
+                      let player = playerDoc.data();
+                      return (
+                        <PlayerRow
+                          key={playerDoc.id}
+                          teamFineDocs={fineDocs}
+                          player={player}
+                        />
+                      )
+                    })
+                  }
                 </span>
               </div>
             </div>

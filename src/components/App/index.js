@@ -59,7 +59,7 @@ class App extends Component {
           <Button onClick={this.onJoin}>Join team</Button>
         </form>
 
-        <TeamList teamDoc={this.props.teamDoc}/>
+        <TeamList teamDoc={this.props.teamDoc} playerDocs={this.props.playerDocs} fineDocs={this.props.fineDocs} />
       </div>
     );
   }
