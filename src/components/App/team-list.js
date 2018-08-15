@@ -3,6 +3,9 @@ import _ from 'lodash';
 import PlayerRow from './player-row';
 import { Button } from 'react-bootstrap';
 
+// for offline development
+import dummyData from 'data/dummy';
+
 import * as actions from 'actions/finetrakActions';
 
 
@@ -11,25 +14,39 @@ class TeamList extends React.Component {
   onCreatePlayer = (teamDoc) => {
     let playerName = this.refs['new-player-name'].value;
     actions.createPlayer(teamDoc.id, playerName);
+    this.refs['new-player-name'].value = '';
   }
 
   render() {
 
     const {
-      teamDocs
+      teamDoc
     } = this.props;
 
-    const isEmptyTeam = teamDocs.length === 0;
+    const isOffline = false;
+    const offlineTeamDoc = isOffline ? dummyData : teamDoc;
 
     return (
       <div>
         {
-          isEmptyTeam ?
+          !teamDoc ?
           <div>
             Incorrect team name or team code. Please try again.
           </div>
+//          (
+//            <div className='container' key={offlineTeamDoc.id}>
+//              <h2>{offlineTeamDoc.name}</h2>
+//              <div>
+//                <span>
+//                  <input ref="new-player-name" placeholder="Enter new player"/>
+//                  <Button onClick={() => this.onCreatePlayer(offlineTeamDoc)}>Add player</Button>
+//                </span>
+//              </div>
+//            </div>
+//          )
+
           :
-          _.map(teamDocs, (teamDoc) => (
+          (
             <div className='container' key={teamDoc.id}>
               <h2>{teamDoc.data().name}</h2>
               <div>
@@ -37,9 +54,12 @@ class TeamList extends React.Component {
                   <input ref="new-player-name" placeholder="Enter new player"/>
                   <Button onClick={() => this.onCreatePlayer(teamDoc)}>Add player</Button>
                 </span>
+                <span>
+
+                </span>
               </div>
             </div>
-          ))
+          )
         }
       </div>
     );

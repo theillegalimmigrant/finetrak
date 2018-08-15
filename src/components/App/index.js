@@ -9,7 +9,7 @@ import { Button } from 'react-bootstrap';
 import './style.css';
 
 const mapStateToProps = (state) => ({
-  teamDocs: state.finetrakReducer.teamDocs
+  teamDoc: state.finetrakReducer.teamDoc
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -57,7 +57,7 @@ class App extends Component {
           <Button onClick={this.onJoin}>Join team</Button>
         </form>
 
-        <TeamList teamDocs={this.props.teamDocs}/>
+        <TeamList teamDoc={this.props.teamDoc}/>
       </div>
     );
   }

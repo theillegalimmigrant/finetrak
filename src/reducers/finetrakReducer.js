@@ -8,12 +8,8 @@ const initialState = {
 export default (state = initialState, action) => {
   let newState = _.merge({}, state);
   switch(action.type) {
-    case actionType.LOAD_TEAMS_SUCCESS: {
-        newState.teamDocs = action.payload;
-        return newState;
-    }
     case actionType.GET_TEAM_SUCCESS: {
-      newState.teamDocs = action.payload;
+      newState.teamDoc = action.payload[0];
       return newState;
     }
     default:

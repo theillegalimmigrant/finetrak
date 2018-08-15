@@ -1,27 +1,6 @@
 import * as fb from 'javascript/firebase';
 import actionType from 'constants';
 
-export const loadTeams = () => {
-    return dispatch => {
-        dispatch({
-            type: actionType.LOAD_TEAMS_REQUEST
-        });
-        fb.getTeamsDB()
-            .then(teams => {
-                dispatch({
-                    type: actionType.LOAD_TEAMS_SUCCESS,
-                    payload: teams.docs
-                });
-            })
-            .catch(error => {
-                dispatch({
-                    type: actionType.LOAD_TEAMS_FAILED,
-                    payload: error
-                });
-            })
-    };
-}
-
 export const getTeam = (name, code) => {
   return dispatch => {
     dispatch({
