@@ -36,6 +36,18 @@ console.log('FB - getTeam');
   return database.collection('teams').where('name','==',name).where('code','==',code).get();
 }
 
+export const getTeamFines = (teamId) => {
+console.log('FB - getTeamFines');
+  return database.collection('teams').doc(teamId).collection('fines').get();
+}
+
+
+export const getTeamPlayers = (teamId) => {
+console.log('FB - getTeamPlayers');
+  return database.collection('teams').doc(teamId).collection('players').get();
+}
+
+
 export const getTeamById = (teamId) => {
 console.log('FB - getTeamById');
   return database.collection('teams').doc(teamId);
@@ -49,5 +61,16 @@ console.log('FB - addPlayer');
     return database.collection('teams')
                    .doc(teamId)
                    .collection('players')
+                   .add(model)
+}
+
+export const addFine = (teamId, infringement, amount) => {
+    let model = fineModel(infringement, amount);
+
+console.log('FB - addFine');
+
+    return database.collection('teams')
+                   .doc(teamId)
+                   .collection('fines')
                    .add(model)
 }

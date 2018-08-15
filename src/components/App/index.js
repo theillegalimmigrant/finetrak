@@ -9,7 +9,9 @@ import { Button } from 'react-bootstrap';
 import './style.css';
 
 const mapStateToProps = (state) => ({
-  teamDoc: state.finetrakReducer.teamDoc
+  teamDoc: state.finetrakReducer.teamDoc,
+  playerDocs: state.finetrakReducer.playerDocs,
+  fineDocs: state.finetrakReducer.fineDocs,
 })
 
 const mapDispatchToProps = dispatch => ({
