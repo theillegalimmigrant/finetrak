@@ -101,10 +101,6 @@ export const getTeamById = (teamId) => {
 }
 
 export const createPlayer = (teamId, name) => {
-
-    console.log(teamId);
-    console.log(name);
-    fb.addPlayer(teamId, name);
   return dispatch => {
     dispatch({
       type: actionType.ADD_PLAYER_REQUEST
@@ -123,4 +119,28 @@ export const createPlayer = (teamId, name) => {
         })
       })
   }
+}
+
+export const finePlayer = (teamId, playerId, fineId) => {
+console.log('in actions');
+fb.finePlayer(teamId, playerId, fineId)
+    return dispatch => {
+        dispatch({
+            type: actionType.FINE_PLAYER_REQUEST
+        })
+        fb.finePlayer(teamId, playerId, fineId)
+          .then(res => {
+            getTeamById(teamId)(dispatch)
+            dispatch({
+              type: actionType.FINE_PLAYER_SUCCESS
+            })
+          })
+          .catch(error => {
+            dispatch({
+              type: actionType.FINE_PLAYER_FAILURE,
+              payload: error
+            })
+          })
+
+    };
 }

@@ -65,6 +65,8 @@ class TeamList extends React.Component {
                         <PlayerRow
                           key={playerDoc.id}
                           teamFineDocs={fineDocs}
+                          teamId={teamDoc.id}
+                          playerId={playerDoc.id}
                           player={player}
                         />
                       )

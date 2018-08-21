@@ -74,3 +74,17 @@ console.log('FB - addFine');
                    .collection('fines')
                    .add(model)
 }
+
+export const finePlayer = (teamId, playerId, fineId) => {
+console.log('FB - finePlayer');
+  let playerRef = database.collection('teams').doc(teamId).collection('players').doc(playerId);
+  return database.runTransaction((t) => {
+    return t.get(playerRef).then((doc) => {
+      // doc doesn't exist; can't update
+      if (!doc.exists) return;
+      // update the users array after getting it from Firestore.
+      const newArray = [...doc.get('finesIssued'), fineId];
+      t.set(playerRef, { finesIssued: newArray }, { merge: true });
+    });
+  }).catch(console.log);
+}

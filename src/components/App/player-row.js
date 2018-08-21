@@ -1,31 +1,62 @@
 import React from 'react';
 import _ from 'lodash';
 import { Button } from 'react-bootstrap';
-import Dropdown, { DropdownTrigger, DropdownContent } from 'react-simple-dropdown';
+import Dropdown from 'react-dropdown';
 
-import './style.css';
+import * as actions from 'actions/finetrakActions';
+
+import 'react-dropdown/style.css';
 
 class PlayerRow extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.state = { selectedFine: '' };
+
+    this.onSelect = this.onSelect.bind(this);
+    this.onAddFineClick = this.onAddFineClick.bind(this);
+  }
+
   sumOfFines = (teamFineDocs, playerFines, playerPayments) => {
-//    const fineAmount = playerFines.reduce((total, fine) => total + teamFineDocs.doc(fine.fineId).amount, 0);
-//    const paymentAmount = playerPayments.reduce((total, payment) => total + payment.amount, 0);
-//
-//    return fineAmount - paymentAmount;
-    return 10;
+    const fineAmount = playerFines.reduce((total, fineId) =>
+      total + teamFineDocs.filter(doc => doc.id == fineId)[0].data().amount, 0);
+    const paymentAmount = playerPayments.reduce((total, payment) => total + payment.amount, 0);
+
+    return fineAmount - paymentAmount;
+  }
+
+  onSelect(selection) {
+    this.state.selectedFine = selection.value;
+  }
+
+  onAddFineClick(teamId, playerId, fineId) {
+
+ console.log(this.state.selectedFine);
+    if (this.state.selectedFine === '') return;
+
+    actions.finePlayer(teamId, playerId, fineId);
+    this.state.selectedFine = '';
+
   }
 
   render() {
     const {
       teamFineDocs,
-      player
+      player,
+      playerId,
+      teamId,
     } = this.props;
 
     const {
       name,
-      fines,
+      finesIssued,
       payments
     } = player;
+
+    const fineOptions = _.map(teamFineDocs, (fineDoc) => {
+      let fine = fineDoc.data();
+      return ({label: fine.infringement, value: fineDoc.id})
+    });
 
     return (
       <div className='row'>
@@ -33,20 +64,17 @@ class PlayerRow extends React.Component {
           {name}
         </div>
         <div className='col-sm-2'>
-          {this.sumOfFines(teamFineDocs, fines, payments)}
+          {this.sumOfFines(teamFineDocs, finesIssued, payments)}
         </div>
         <div className='col-sm-6'>
-          <span>
-            <Dropdown>
-              <DropdownTrigger>Add fine</DropdownTrigger>
-              <DropdownContent>
-                <ul>
-                  <li>Drop catch</li>
-                  <li>Duck</li>
-                </ul>
-              </DropdownContent>
-            </Dropdown>
-          </span>
+          <div>
+            <Dropdown
+              options={fineOptions}
+              placeholder='Select fine'
+              onChange={this.onSelect}
+            />
+            <Button onClick={() => this.onAddFineClick(teamId, playerId, this.state.selectedFine)}>Add fine</Button>
+          </div>
           <span>
             <input ref="payment-amount" placeholder="Enter payment amount"/>
             <Button>Add payment</Button>
