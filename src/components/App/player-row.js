@@ -2,10 +2,15 @@ import React from 'react';
 import _ from 'lodash';
 import { Button } from 'react-bootstrap';
 import Dropdown from 'react-dropdown';
+import {connect} from 'react-redux';
 
 import * as actions from 'actions/finetrakActions';
 
 import 'react-dropdown/style.css';
+
+const mapDispatchToProps = dispatch => ({
+  dispatchFinePlayer: (teamId, playerId, fineId) => dispatch(actions.finePlayer(teamId, playerId, fineId))
+})
 
 class PlayerRow extends React.Component {
 
@@ -19,7 +24,7 @@ class PlayerRow extends React.Component {
 
   sumOfFines = (teamFineDocs, playerFines, playerPayments) => {
     const fineAmount = playerFines.reduce((total, fineId) =>
-      total + teamFineDocs.filter(doc => doc.id == fineId)[0].data().amount, 0);
+      total + teamFineDocs.filter(doc => doc.id === fineId)[0].data().amount, 0);
     const paymentAmount = playerPayments.reduce((total, payment) => total + payment.amount, 0);
 
     return fineAmount - paymentAmount;
@@ -34,7 +39,7 @@ class PlayerRow extends React.Component {
  console.log(this.state.selectedFine);
     if (this.state.selectedFine === '') return;
 
-    actions.finePlayer(teamId, playerId, fineId);
+    this.props.dispatchFinePlayer(teamId, playerId, fineId);
     this.state.selectedFine = '';
 
   }
@@ -85,4 +90,4 @@ class PlayerRow extends React.Component {
   }
 }
 
-export default PlayerRow;
+export default connect(null, mapDispatchToProps)(PlayerRow);

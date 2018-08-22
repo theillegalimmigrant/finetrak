@@ -50,7 +50,7 @@ console.log('FB - getTeamPlayers');
 
 export const getTeamById = (teamId) => {
 console.log('FB - getTeamById');
-  return database.collection('teams').doc(teamId);
+  return database.collection('teams').doc(teamId).get();
 }
 
 export const addPlayer = (teamId, name) => {

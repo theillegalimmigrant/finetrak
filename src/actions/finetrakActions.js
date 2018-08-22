@@ -79,24 +79,24 @@ export const createTeam = (name, code) => {
     };
 }
 
-export const getTeamById = (teamId) => {
+export const refreshTeam = (teamId) => {
   return dispatch => {
       dispatch({
         type: actionType.GET_TEAM_REQUEST
       })
-      fb.getTeamById(teamId)
-        .then(team => {
+      fb.getTeamPlayers(teamId)
+        .then(players => {
           dispatch({
-            type: actionType.GET_TEAM_SUCCESS,
-            payload: team.docs
+            type: actionType.GET_TEAM_PLAYERS_SUCCESS,
+            payload: players.docs
           })
         })
         .catch(error => {
           dispatch({
-            type: actionType.GET_TEAM_FAILED,
-            payload: error
-          });
-        })
+           type: actionType.GET_TEAM_PLAYERS_FAILED,
+           payload: error
+          })
+        });
     };
 }
 
@@ -104,10 +104,10 @@ export const createPlayer = (teamId, name) => {
   return dispatch => {
     dispatch({
       type: actionType.ADD_PLAYER_REQUEST
-    })
+    });
     fb.addPlayer(teamId, name)
       .then(res => {
-          getTeamById(teamId)(dispatch)
+          refreshTeam(teamId)(dispatch)
           dispatch({
               type: actionType.ADD_PLAYER_SUCCESS
           })
@@ -118,19 +118,17 @@ export const createPlayer = (teamId, name) => {
           payload: error
         })
       })
-  }
+  };
 }
 
 export const finePlayer = (teamId, playerId, fineId) => {
-console.log('in actions');
-fb.finePlayer(teamId, playerId, fineId)
     return dispatch => {
         dispatch({
             type: actionType.FINE_PLAYER_REQUEST
         })
         fb.finePlayer(teamId, playerId, fineId)
           .then(res => {
-            getTeamById(teamId)(dispatch)
+            refreshTeam(teamId)(dispatch)
             dispatch({
               type: actionType.FINE_PLAYER_SUCCESS
             })
