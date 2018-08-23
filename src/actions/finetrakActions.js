@@ -55,7 +55,6 @@ export const getTeam = (name) => {
   };
 }
 
-
 export const getTeamAdmin = (name, code) => {
   return dispatch => {
     dispatch({
@@ -189,6 +188,27 @@ export const createPlayer = (teamId, name) => {
         })
       })
   };
+}
+
+export const deletePlayer = (teamId, playerId) => {
+  return dispatch => {
+    dispatch({
+      type: actionType.DELETE_PLAYER_REQUEST
+    });
+    fb.deletePlayer(teamId, playerId)
+      .then(res => {
+        refreshTeam(teamId)(dispatch);
+        dispatch({
+            type: actionType.DELETE_PLAYER_SUCCESS
+        })
+      })
+      .catch(error =>
+        dispatch({
+          type: actionType.DELETE_PLAYER_FAILURE,
+          payload: error
+        })
+      )
+  }
 }
 
 export const finePlayer = (teamId, playerId, fineId) => {

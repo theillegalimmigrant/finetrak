@@ -1,0 +1,10 @@
+.playerContainer {
+   display: flex;
+   flex-direction: row;
+   justify-content: space-between;
+ }
+
+.fineContainer {
+  display: flex;
+  flex-direction: row;
+}

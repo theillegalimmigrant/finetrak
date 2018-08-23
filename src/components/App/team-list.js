@@ -15,16 +15,21 @@ const mapDispatchToProps = dispatch => ({
 
 class TeamList extends React.Component {
 
-  onCreatePlayer = (teamDoc) => {
+  constructor(props) {
+    super(props);
+
+    this.createPlayer = this.createPlayer.bind(this);
+  }
+
+  createPlayer = (teamDoc) => {
     let playerName = this.refs['new-player-name'].value;
-    if (playerName = '') {
+    if (playerName != '') {
       this.props.dispatchCreatePlayer(teamDoc.id, playerName);
       this.refs['new-player-name'].value = '';
     }
   }
 
   render() {
-
     const {
       teamDoc,
       playerDocs,
@@ -44,7 +49,7 @@ class TeamList extends React.Component {
                 { isAdmin &&
                   <span>
                     <input ref="new-player-name" placeholder="Enter new player"/>
-                    <Button onClick={() => this.onCreatePlayer(teamDoc)}>Add player</Button>
+                    <Button onClick={() => this.createPlayer(teamDoc)}>Add player</Button>
                   </span>
                 }
                 <span>

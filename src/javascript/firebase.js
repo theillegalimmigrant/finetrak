@@ -31,6 +31,11 @@ console.log('FB - addTeam');
     return database.collection('teams').add(model);
 };
 
+export const deleteTeam = (teamId) => {
+  console.log('FB - deleteTeam');
+  return database.collection('teams').doc(teamId).delete();
+}
+
 export const getTeam = (name) => {
 console.log('FB - getTeam');
   return database.collection('teams').where('name','==',name).get();
@@ -69,6 +74,15 @@ console.log('FB - addPlayer');
                    .add(model)
 }
 
+export const deletePlayer = (teamId, playerId) => {
+  console.log('FB - delete Player');
+  return database.collection('teams')
+                 .doc(teamId)
+                 .collection('players')
+                 .doc(playerId)
+                 .delete();
+}
+
 export const addFine = (teamId, infringement, amount) => {
     let model = fineModel(infringement, amount);
 
@@ -78,6 +92,15 @@ console.log('FB - addFine');
                    .doc(teamId)
                    .collection('fines')
                    .add(model)
+}
+
+export const deleteFine = (teamId, fineId) => {
+  console.log('FB - delete fine');
+  return database.collection('teams')
+                 .doc(teamId)
+                 .collection('fines')
+                 .doc(fineId)
+                 .delete();
 }
 
 export const finePlayer = (teamId, playerId, fineId) => {

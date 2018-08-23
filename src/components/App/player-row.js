@@ -6,10 +6,12 @@ import {connect} from 'react-redux';
 
 import * as actions from 'actions/finetrakActions';
 
+import './player-row.css';
 import 'react-dropdown/style.css';
 
 const mapDispatchToProps = dispatch => ({
-  dispatchFinePlayer: (teamId, playerId, fineId) => dispatch(actions.finePlayer(teamId, playerId, fineId))
+  dispatchFinePlayer: (teamId, playerId, fineId) => dispatch(actions.finePlayer(teamId, playerId, fineId)),
+  dispatchDeletePlayer: (teamId, playerId) => dispatch(actions.deletePlayer(teamId, playerId))
 })
 
 class PlayerRow extends React.Component {
@@ -35,13 +37,10 @@ class PlayerRow extends React.Component {
   }
 
   onAddFineClick(teamId, playerId, fineId) {
-
- console.log(this.state.selectedFine);
     if (this.state.selectedFine === '') return;
 
     this.props.dispatchFinePlayer(teamId, playerId, fineId);
     this.state.selectedFine = '';
-
   }
 
   render() {
@@ -64,15 +63,15 @@ class PlayerRow extends React.Component {
     });
 
     return (
-      <div className='row'>
-        <div className='col-sm-4'>
+      <div className="playerContainer">
+        <div>
           {name}
         </div>
-        <div className='col-sm-2'>
+        <div>
           {this.sumOfFines(teamFineDocs, finesIssued, payments)}
         </div>
-        <div className='col-sm-6'>
-          <div>
+        <div>
+          <div className="fineContainer">
             <Dropdown
               options={fineOptions}
               placeholder='Select fine'
@@ -80,11 +79,12 @@ class PlayerRow extends React.Component {
             />
             <Button onClick={() => this.onAddFineClick(teamId, playerId, this.state.selectedFine)}>Add fine</Button>
           </div>
-          <span>
+          <div>
             <input ref="payment-amount" placeholder="Enter payment amount"/>
             <Button>Add payment</Button>
-          </span>
+          </div>
         </div>
+        <Button onClick={() => this.props.dispatchDeletePlayer(teamId, playerId)}>X</Button>
       </div>
     );
   }
