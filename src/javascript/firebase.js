@@ -116,3 +116,17 @@ console.log('FB - finePlayer');
     });
   }).catch(console.log);
 }
+
+export const addPlayerPayment = (teamId, playerId, amount) => {
+console.log('FB - addPlayerPayment');
+  let playerRef = database.collection('teams').doc(teamId).collection('players').doc(playerId);
+  return database.runTransaction((t) => {
+    return t.get(playerRef).then((doc) => {
+      // doc doesn't exist; can't update
+      if (!doc.exists) return;
+      // update the users array after getting it from Firestore.
+      const newArray = [...doc.get('payments'), amount];
+      t.set(playerRef, { payments: newArray }, { merge: true });
+    });
+  }).catch(console.log);
+}

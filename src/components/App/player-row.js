@@ -11,7 +11,8 @@ import 'react-dropdown/style.css';
 
 const mapDispatchToProps = dispatch => ({
   dispatchFinePlayer: (teamId, playerId, fineId) => dispatch(actions.finePlayer(teamId, playerId, fineId)),
-  dispatchDeletePlayer: (teamId, playerId) => dispatch(actions.deletePlayer(teamId, playerId))
+  dispatchDeletePlayer: (teamId, playerId) => dispatch(actions.deletePlayer(teamId, playerId)),
+  dispatchAddPlayerPayment: (teamId, playerId, amount) => dispatch(actions.addPlayerPayment(teamId, playerId, amount))
 })
 
 class PlayerRow extends React.Component {
@@ -27,9 +28,9 @@ class PlayerRow extends React.Component {
   sumOfFines = (teamFineDocs, playerFines, playerPayments) => {
     const fineAmount = playerFines.reduce((total, fineId) =>
       total + teamFineDocs.filter(doc => doc.id === fineId)[0].data().amount, 0);
-    const paymentAmount = playerPayments.reduce((total, payment) => total + payment.amount, 0);
+    const paymentAmount = playerPayments.reduce((total, payment) => total + payment, 0);
 
-    return fineAmount - paymentAmount;
+    return Math.round((fineAmount - paymentAmount)*100) / 100;
   }
 
   onSelect(selection) {
@@ -41,6 +42,14 @@ class PlayerRow extends React.Component {
 
     this.props.dispatchFinePlayer(teamId, playerId, fineId);
     this.state.selectedFine = '';
+  }
+
+  onAddPaymentClick(teamId, playerId) {
+    let amount = this.refs['payment-amount'].value;
+    if (amount != '') {
+      this.props.dispatchAddPlayerPayment(teamId, playerId, parseFloat(amount));
+    }
+    this.refs['payment-amount'].value = '';
   }
 
   render() {
@@ -81,7 +90,7 @@ class PlayerRow extends React.Component {
           </div>
           <div>
             <input ref="payment-amount" placeholder="Enter payment amount"/>
-            <Button>Add payment</Button>
+            <Button onClick={() => this.onAddPaymentClick(teamId, playerId)}>Add payment</Button>
           </div>
         </div>
         <Button onClick={() => this.props.dispatchDeletePlayer(teamId, playerId)}>X</Button>

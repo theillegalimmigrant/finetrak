@@ -232,3 +232,25 @@ export const finePlayer = (teamId, playerId, fineId) => {
 
     };
 }
+
+export const addPlayerPayment = (teamId, playerId, amount) => {
+    return dispatch => {
+        dispatch({
+            type: actionType.PLAYER_PAYMENT_REQUEST
+        })
+        fb.addPlayerPayment(teamId, playerId, amount)
+          .then(res => {
+            refreshTeam(teamId)(dispatch)
+            dispatch({
+              type: actionType.PLAYER_PAYMENT_SUCCESS
+            })
+          })
+          .catch(error => {
+            dispatch({
+              type: actionType.PLAYER_PAYMENT_FAILURE,
+              payload: error
+            })
+          })
+
+    };
+}
