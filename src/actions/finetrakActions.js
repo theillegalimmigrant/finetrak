@@ -1,7 +1,7 @@
 import * as fb from 'javascript/firebase';
 import actionType from 'constants';
 
-export const getTeam = (name, code) => {
+export const getTeam = (name) => {
   return dispatch => {
     dispatch({
       type: actionType.GET_TEAM_REQUEST
@@ -12,15 +12,12 @@ export const getTeam = (name, code) => {
     dispatch({
       type: actionType.GET_TEAM_FINES_REQUEST
     })
-    fb.getTeam(name, code)
+    fb.getTeam(name)
       .then(team => {
-
         dispatch({
           type: actionType.GET_TEAM_SUCCESS,
           payload: team.docs
         });
-
-
         let teamId = team.docs[0].id;
         fb.getTeamFines(teamId)
           .then(fines => {
@@ -58,24 +55,97 @@ export const getTeam = (name, code) => {
   };
 }
 
+
+export const getTeamAdmin = (name, code) => {
+  return dispatch => {
+    dispatch({
+      type: actionType.ADMIN_GET_TEAM_REQUEST
+    });
+    dispatch({
+      type: actionType.GET_TEAM_PLAYERS_REQUEST
+    });
+    dispatch({
+      type: actionType.GET_TEAM_FINES_REQUEST
+    })
+    fb.adminGetTeam(name, code)
+      .then(team => {
+        dispatch({
+          type: actionType.ADMIN_GET_TEAM_SUCCESS,
+          payload: team.docs
+        });
+        let teamId = team.docs[0].id;
+        fb.getTeamFines(teamId)
+          .then(fines => {
+            dispatch({
+              type: actionType.GET_TEAM_FINES_SUCCESS,
+              payload: fines.docs
+            })
+          })
+          .catch(error => {
+            dispatch({
+             type: actionType.GET_TEAM_FINES_FAILED,
+             payload: error
+            })
+          });
+        fb.getTeamPlayers(teamId)
+          .then(players => {
+            dispatch({
+              type: actionType.GET_TEAM_PLAYERS_SUCCESS,
+              payload: players.docs
+            })
+          })
+          .catch(error => {
+            dispatch({
+             type: actionType.GET_TEAM_PLAYERS_FAILED,
+             payload: error
+            })
+          });
+      })
+      .catch(error => {
+        dispatch({
+          type: actionType.ADMIN_GET_TEAM_FAILED,
+          payload: error
+        });
+      });
+  };
+}
+
 export const createTeam = (name, code) => {
     return dispatch => {
         dispatch({
             type: actionType.ADD_TEAM_REQUEST
         })
-        fb.addTeam(name, code)
-            .then(res => {
-                getTeam(name, code)(dispatch)
-                dispatch({
-                    type: actionType.ADD_TEAM_SUCCESS
-                })
+        fb.getTeam(name)
+        .then(team =>{
+          console.log(team.docs.length)
+          if (team.docs.length === 0) {
+            fb.addTeam(name, code)
+              .then(res => {
+                  getTeam(name)(dispatch)
+                  dispatch({
+                      type: actionType.ADD_TEAM_SUCCESS
+                  })
+              })
+              .catch(error => {
+                  dispatch({
+                      type: actionType.ADD_TEAM_FAILED,
+                      payload: error
+                  })
+              })
+          } else {
+            dispatch({
+                type: actionType.ADD_TEAM_FAILED,
+                payload: "data/team-name-exists"
             })
-            .catch(error => {
-                dispatch({
-                    type: actionType.ADD_TEAM_FAILURE,
-                    payload: error
-                })
+          }
+        })
+        .catch(error => {
+            dispatch({
+                type: actionType.ADD_TEAM_FAILED,
+                payload: error
             })
+        })
+
     };
 }
 

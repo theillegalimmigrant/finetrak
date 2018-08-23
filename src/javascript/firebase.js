@@ -31,8 +31,13 @@ console.log('FB - addTeam');
     return database.collection('teams').add(model);
 };
 
-export const getTeam = (name, code) => {
+export const getTeam = (name) => {
 console.log('FB - getTeam');
+  return database.collection('teams').where('name','==',name).get();
+}
+
+export const adminGetTeam = (name, code) => {
+console.log('FB - adminGetTeam');
   return database.collection('teams').where('name','==',name).where('code','==',code).get();
 }
 

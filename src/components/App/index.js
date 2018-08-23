@@ -12,18 +12,17 @@ const mapStateToProps = (state) => ({
   teamDoc: state.finetrakReducer.teamDoc,
   playerDocs: state.finetrakReducer.playerDocs,
   fineDocs: state.finetrakReducer.fineDocs,
+  isAdmin: state.finetrakReducer.isAdmin,
 })
 
 const mapDispatchToProps = dispatch => ({
-  dispatchLoadTeams: () => dispatch(actions.loadTeams()),
   dispatchCreateTeam: (name,code) => dispatch(actions.createTeam(name, code)),
-  dispatchGetTeam: (name,code) => dispatch(actions.getTeam(name, code))
+  dispatchGetTeamAdmin: (name,code) => dispatch(actions.getTeamAdmin(name, code)),
+  dispatchGetTeam: (name) => dispatch(actions.getTeam(name)),
 })
 
 class App extends Component {
-//    componentDidMount() {
-//        this.props.dispatchLoadTeams();
-//    }
+
 
     onSubmit = (e) => {
         e.preventDefault();
@@ -40,12 +39,16 @@ class App extends Component {
       e.preventDefault();
       let ref = this.refs['team-name'];
       let code = this.refs['team-code'];
-      if (ref.value !== '' && code.value !== '') {
-        this.props.dispatchGetTeam(ref.value,code.value);
+      if (ref.value !== '') {
+        if (code.value !== '') {
+          this.props.dispatchGetTeamAdmin(ref.value, code.value);
+        } else {
+          this.props.dispatchGetTeam(ref.value);
+        }
         ref.value = '';
         code.value = '';
       } else {
-        this.props.dispatchGetTeam('DLSKCC1','dlskcc1');
+        this.props.dispatchGetTeamAdmin('DLSKCC1','dlskcc1');
       }
     }
 
@@ -56,10 +59,12 @@ class App extends Component {
           <input ref="team-name" placeholder="Enter team name"/>
           <input ref="team-code" placeholder="Enter team code"/>
           <Button onClick={this.onSubmit}>Add new team</Button>
-          <Button onClick={this.onJoin}>Join team</Button>
+          <Button onClick={this.onJoin}>Open existing team</Button>
         </form>
-
-        <TeamList teamDoc={this.props.teamDoc} playerDocs={this.props.playerDocs} fineDocs={this.props.fineDocs} />
+        { this.props.teamDoc ?
+          <TeamList teamDoc={this.props.teamDoc} playerDocs={this.props.playerDocs} fineDocs={this.props.fineDocs} isAdmin={this.props.isAdmin} /> :
+          <div>Enter your team name to view fines and enter code to view admin page</div>
+        }
       </div>
     );
   }

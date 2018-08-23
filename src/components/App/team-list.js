@@ -29,6 +29,7 @@ class TeamList extends React.Component {
       teamDoc,
       playerDocs,
       fineDocs,
+      isAdmin
     } = this.props;
 
     const team = teamDoc ? teamDoc.data() : {};
@@ -37,32 +38,15 @@ class TeamList extends React.Component {
     const offlineTeamDoc = isOffline ? dummyData : teamDoc;
 
     return (
-      <div>
-        {
-          !teamDoc ?
-          <div>
-            Incorrect team name or team code. Please try again.
-          </div>
-//          (
-//            <div className='container' key={offlineTeamDoc.id}>
-//              <h2>{offlineTeamDoc.name}</h2>
-//              <div>
-//                <span>
-//                  <input ref="new-player-name" placeholder="Enter new player"/>
-//                  <Button onClick={() => this.onCreatePlayer(offlineTeamDoc)}>Add player</Button>
-//                </span>
-//              </div>
-//            </div>
-//          )
-          :
-          (
             <div className='container' key={teamDoc.id}>
               <h2>{team.name}</h2>
               <div>
-                <span>
-                  <input ref="new-player-name" placeholder="Enter new player"/>
-                  <Button onClick={() => this.onCreatePlayer(teamDoc)}>Add player</Button>
-                </span>
+                { isAdmin &&
+                  <span>
+                    <input ref="new-player-name" placeholder="Enter new player"/>
+                    <Button onClick={() => this.onCreatePlayer(teamDoc)}>Add player</Button>
+                  </span>
+                }
                 <span>
                   {
                     _.map(playerDocs, (playerDoc) => {
@@ -81,9 +65,6 @@ class TeamList extends React.Component {
                 </span>
               </div>
             </div>
-          )
-        }
-      </div>
     );
   }
 }
